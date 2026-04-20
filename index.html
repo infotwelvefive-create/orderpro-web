@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrderPro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Mitr:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pri:#6D28D9;--pri2:#7C3AED;--pri-l:#EDE9FE;--pri-ll:#F5F3FF;
+  --teal:#0D9488;--tl:#CCFBF1;
+  --amb:#D97706;--red:#DC2626;
+  --grn:#16A34A;--blu:#2563EB;
+  --g0:#F4F6F9;--g1:#F3F4F6;--g2:#E5E7EB;--g3:#D1D5DB;
+  --t1:#111827;--t2:#374151;--t3:#6B7280;--t4:#9CA3AF;
+  --white:#fff;--r:12px;--r2:16px;
+  --sh:0 1px 4px rgba(0,0,0,.07);--sh2:0 4px 20px rgba(0,0,0,.12);
+}
+html,body{height:auto;min-height:100%;overflow-x:hidden}
+body{font-family:'Sarabun',sans-serif;background:var(--g0);color:var(--t1);font-size:14px}
+.ls,.ps{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.ls{background:linear-gradient(160deg,#F0EDFF 0%,#E8F4FD 55%,#E8FBF5 100%)}
+.ps{background:linear-gradient(160deg,#F0EDFF,#E8F4FD)}
+.app-shell{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+.lb{width:100%;max-width:420px;text-align:center}
+.logo-area{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+.logo-img{width:80px;height:80px;border-radius:20px;object-fit:cover;box-shadow:0 4px 16px rgba(109,40,217,.25);cursor:pointer;border:3px solid var(--white);transition:.2s}
+.logo-img:hover{transform:scale(1.06)}
+.logo-ph{width:80px;height:80px;border-radius:20px;background:linear-gradient(135deg,var(--pri-l),#DDD6FE);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 4px 16px rgba(109,40,217,.2);cursor:pointer;border:3px solid var(--white);position:relative;transition:.2s}
+.logo-ph:hover{transform:scale(1.06)}
+.logo-eb{position:absolute;bottom:-6px;right:-6px;background:var(--pri);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;border:2px solid var(--white);pointer-events:none}
+.logo-hint{font-size:11px;color:var(--t4);margin-top:8px}
+.app-title{font-family:'Mitr',sans-serif;font-size:30px;font-weight:700;color:var(--pri)}
+.app-sub{font-size:13px;color:var(--t3);margin:4px 0 28px}
+.role-card{background:var(--white);border-radius:18px;border:1.5px solid var(--g2);padding:18px 20px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:left}
+.role-card:hover{border-color:var(--pri);box-shadow:0 6px 24px rgba(109,40,217,.16);transform:translateY(-2px)}
+.role-card:active{transform:translateY(0) scale(.99)}
+.ri{font-size:40px;flex-shrink:0;width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:14px}
+.ri.admin{background:linear-gradient(135deg,#EDE9FE,#DDD6FE)}
+.ri.staff{background:linear-gradient(135deg,#E0F2FE,#BAE6FD)}
+.ri.report{background:linear-gradient(135deg,#D1FAE5,#A7F3D0)}
+.rn{font-family:'Mitr',sans-serif;font-size:17px;font-weight:600;color:var(--t1)}
+.rd{font-size:12px;color:var(--t3);margin-top:2px}
+.pb{background:var(--white);border-radius:22px;padding:32px 26px;max-width:320px;width:100%;text-align:center;box-shadow:var(--sh2)}
+.pt{font-family:'Mitr',sans-serif;font-size:19px;font-weight:600;color:var(--pri);margin-bottom:5px}
+.psub{font-size:13px;color:var(--t3);margin-bottom:20px}
+.pdots{display:flex;justify-content:center;gap:14px;margin-bottom:22px}
+.pdot{width:14px;height:14px;border-radius:50%;border:2px solid var(--g3);transition:.2s;background:var(--white)}
+.pdot.on{background:var(--pri);border-color:var(--pri);transform:scale(1.15)}
+.ppad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.pk{background:var(--g1);border:none;border-radius:14px;padding:15px;font-size:22px;font-family:'Mitr',sans-serif;font-weight:600;cursor:pointer;transition:.12s;color:var(--t1)}
+.pk:hover{background:var(--g2)}
+.pk:active{transform:scale(.92);background:var(--pri-l);color:var(--pri)}
+.pk.del{background:#FEE2E2;color:#991B1B;font-size:15px}
+.pk.z{grid-column:2}
+.perr{color:var(--red);font-size:12px;min-height:18px;font-weight:600;margin-bottom:8px}
+.pback{font-size:12px;color:var(--t4);cursor:pointer;text-decoration:underline}
+.pback:hover{color:var(--pri)}
+.topbar{background:var(--white);border-bottom:1px solid var(--g2);padding:0 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;height:52px}
+.brand{font-family:'Mitr',sans-serif;font-size:16px;font-weight:700;color:var(--pri);display:flex;align-items:center;gap:8px}
+.brand-logo{width:30px;height:30px;border-radius:8px;object-fit:cover}
+.brand-dot{width:7px;height:7px;background:var(--grn);border-radius:50%;animation:pulse 2s infinite}
+.brand-dot.offline{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.55)}}
+.rbadge{border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;white-space:nowrap}
+.rbadge.admin{background:#EDE9FE;color:#5B21B6}
+.rbadge.staff{background:#E0F2FE;color:#0369A1}
+.rbadge.report{background:#D1FAE5;color:#065F46}
+.spacer{flex:1}
+.logout-btn{background:none;border:1px solid var(--g2);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--t3);cursor:pointer;font-family:'Sarabun',sans-serif}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+.menu-bar{background:var(--white);border-bottom:1px solid var(--g2);padding:0 16px;display:flex;align-items:center;gap:6px;overflow-x:auto;height:44px;flex-shrink:0}
+.mgroup{display:flex;align-items:center;gap:1px;background:var(--g1);border-radius:8px;padding:3px}
+.msep{width:1px;height:26px;background:var(--g2);margin:0 4px;flex-shrink:0}
+.mgl{font-size:10px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.4px;padding:0 4px;white-space:nowrap}
+.mb{padding:5px 11px;border-radius:6px;font-size:12.5px;font-weight:500;color:var(--t3);border:none;background:none;cursor:pointer;white-space:nowrap;transition:.15s;font-family:'Sarabun',sans-serif}
+.mb:hover{background:var(--white);color:var(--t1)}
+.mb.active{background:var(--white);color:var(--pri);font-weight:700;box-shadow:var(--sh)}
+.main{flex:1;padding:16px;max-width:920px;margin:0 auto;width:100%}
+.card{background:var(--white);border-radius:var(--r2);border:1px solid var(--g2);padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.card-title{font-family:'Mitr',sans-serif;font-size:15px;font-weight:500;margin-bottom:14px}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:14px;color:var(--t1);background:var(--white);outline:none;font-family:'Sarabun',sans-serif;transition:.15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(109,40,217,.1)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.btn{padding:9px 16px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.15s;display:inline-flex;align-items:center;gap:6px;font-family:'Sarabun',sans-serif;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--pri);color:#fff}.bp:hover{background:var(--pri2)}
+.br{background:var(--red);color:#fff}.br:hover{opacity:.88}
+.bg{background:var(--g1);color:var(--t2)}.bg:hover{background:var(--g2)}
+.bsm{padding:6px 12px;font-size:12px}
+.bxs{padding:5px 10px;font-size:12px;border-radius:7px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.bwait{background:#FEF3C7;color:#92400E}
+.bprod{background:#DBEAFE;color:#1E40AF}
+.bready{background:#DCFCE7;color:#166534}
+.bsent{background:#F3F4F6;color:#374151}
+.bissue{background:#FEE2E2;color:#991B1B}
+.tag{background:var(--g1);border-radius:6px;padding:3px 8px;font-size:12px;color:var(--t2)}
+.tmod{background:var(--pri-l);color:#5B21B6}
+.tqty{background:var(--tl);color:#0f766e;font-weight:700}
+.tcol{background:#FEF9C3;color:#854D0E}
+.sp{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.sp-wait{background:#FEF3C7;color:#92400E}
+.sp-prod{background:#DBEAFE;color:#1E40AF}
+.sp-ready{background:#DCFCE7;color:#166534}
+.sp-sent{background:#F3F4F6;color:#374151}
+.sp-issue{background:#FEE2E2;color:#991B1B}
+.pay-paid{background:#DCFCE7;color:#166534;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.pay-unpaid{background:#FEE2E2;color:#991B1B;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.due-date-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:700;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
+.due-date-badge.urgent{background:#FEE2E2;color:#991B1B;border-color:#FCA5A5}
+.due-date-badge.ok{background:#DCFCE7;color:#166534;border-color:#86EFAC}
+.oi{background:var(--white);border:1.5px solid var(--g2);border-radius:var(--r2);padding:14px;margin-bottom:12px;transition:.15s}
+.oi:hover{border-color:#C4B5FD}
+.oi-hd{display:flex;gap:12px;align-items:flex-start}
+.oi-thumb{width:76px;height:76px;border-radius:10px;object-fit:cover;border:1px solid var(--g2);cursor:pointer;flex-shrink:0;transition:.2s}
+.oi-thumb:hover{transform:scale(1.06)}
+.oi-ph{width:76px;height:76px;border-radius:10px;background:var(--g1);border:2px dashed var(--g3);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:.15s;flex-direction:column;gap:2px}
+.oi-ph:hover{border-color:var(--pri);background:var(--pri-ll)}
+.oi-info{flex:1;min-width:0}
+.oi-name{font-family:'Mitr',sans-serif;font-weight:500;font-size:15px}
+.oi-meta{font-size:12px;color:var(--t3);margin:3px 0 7px}
+.oi-tags{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.extra-imgs{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.eimg{width:40px;height:40px;border-radius:6px;object-fit:cover;cursor:pointer;border:1px solid var(--g2);transition:.15s}
+.eimg:hover{transform:scale(1.1)}
+.oi-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.steps{display:flex;margin:10px 0}
+.step{flex:1;text-align:center;position:relative}
+.step::after{content:'';position:absolute;top:11px;left:50%;width:100%;height:2px;background:var(--g2);z-index:0}
+.step:last-child::after{display:none}
+.sdot{width:22px;height:22px;border-radius:50%;border:2px solid var(--g3);background:var(--white);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;position:relative;z-index:1;font-size:9px;font-weight:700;color:var(--t4)}
+.sdot.done{background:var(--grn);border-color:var(--grn);color:#fff}
+.sdot.cur{background:var(--pri);border-color:var(--pri);color:#fff}
+.slbl{font-size:10px;color:var(--t4);line-height:1.2}
+.slbl.done{color:var(--grn)}
+.slbl.cur{color:var(--pri);font-weight:700}
+.sub-item{background:var(--g0);border:1.5px solid #A7F3D0;border-radius:var(--r2);padding:14px;margin-top:8px}
+.sub-item:hover{border-color:var(--teal)}
+.sub-thumb{width:76px;height:76px;border-radius:10px;object-fit:cover;border:1px solid var(--g2);cursor:pointer;flex-shrink:0;transition:.2s}
+.sub-thumb:hover{transform:scale(1.06)}
+.sub-ph{width:76px;height:76px;border-radius:10px;background:var(--white);border:2px dashed var(--g3);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:.15s;flex-direction:column;gap:2px}
+.sub-ph:hover{border-color:var(--teal);background:var(--tl)}
+.sub-status-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center;padding-top:8px;border-top:1px dashed var(--g2)}
+.num-b{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--pri);color:#fff;font-size:10px;font-weight:700;font-family:'Mitr',sans-serif;flex-shrink:0}
+.num-b.sub{background:var(--teal)}
+.del-section{background:var(--g0);border:1.5px solid var(--g2);border-radius:var(--r);padding:12px;margin-top:10px}
+.del-title{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.del-proof-img{width:60px;height:60px;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid var(--g2)}
+.order-block{background:var(--g0);border:1.5px solid var(--g2);border-radius:var(--r);padding:16px;margin-bottom:14px;position:relative;padding-top:22px}
+.obn{position:absolute;top:-10px;left:14px;background:var(--pri);color:#fff;border-radius:20px;padding:2px 12px;font-size:11px;font-weight:700;font-family:'Mitr',sans-serif}
+.ob-del-btn{position:absolute;top:-10px;right:10px;background:var(--red);color:#fff;border:none;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif}
+.add-blk{border:2px dashed var(--g3);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:.15s;color:var(--t3);font-size:13px;font-weight:600;background:none;width:100%;margin-top:4px;font-family:'Sarabun',sans-serif}
+.add-blk:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-ll)}
+.sub-form-block{background:var(--white);border:1.5px solid #A7F3D0;border-radius:var(--r);padding:14px;margin-bottom:10px;position:relative;padding-top:22px}
+.sub-form-num{position:absolute;top:-9px;left:10px;background:var(--teal);color:#fff;border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;font-family:'Mitr',sans-serif}
+.sub-form-del{position:absolute;top:-9px;right:8px;background:var(--red);color:#fff;border:none;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif}
+.sf label{display:block;font-size:11px;font-weight:700;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.sf input{width:100%;padding:9px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:14px;color:var(--t1);background:var(--white);outline:none;font-family:'Sarabun',sans-serif;transition:.15s}
+.sf input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.add-sub-btn{border:1.5px dashed #A7F3D0;border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:.15s;color:var(--teal);font-size:13px;font-weight:600;background:none;width:100%;font-family:'Sarabun',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px}
+.add-sub-btn:hover{background:var(--tl);border-color:var(--teal)}
+.upzone{border:2px dashed var(--g3);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:.15s;background:var(--g0)}
+.upzone:hover{border-color:var(--pri);background:var(--pri-ll)}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin-top:10px}
+.iwrap{position:relative}
+.iprev{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--g2)}
+.idel{position:absolute;top:-5px;right:-5px;width:18px;height:18px;background:var(--red);color:#fff;border:none;border-radius:50%;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.sc{background:var(--white);border:1px solid var(--g2);border-radius:var(--r);padding:14px;text-align:center}
+.sn{font-family:'Mitr',sans-serif;font-size:28px;font-weight:600;color:var(--pri)}
+.sl{font-size:11px;color:var(--t3);margin-top:2px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--g1);padding:8px 10px;text-align:left;font-weight:600;color:var(--t3);font-size:12px}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--g1);color:var(--t2);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.total-row td{font-weight:700;color:var(--t1);background:var(--pri-ll)}
+.rep-img{width:100%;max-height:320px;object-fit:contain;border-radius:10px;border:1px solid var(--g2);background:#f8f8f8;cursor:pointer;margin-bottom:10px;display:block;transition:.2s}
+.rep-img:hover{transform:scale(1.01)}
+.rep-h{font-size:13px;font-weight:700;border-bottom:2px solid var(--pri-l);padding-bottom:6px;margin:14px 0 10px}
+.model-head{background:linear-gradient(135deg,var(--pri-ll),var(--tl));border-radius:var(--r2);padding:16px;display:flex;gap:14px;align-items:flex-start;margin-bottom:12px}
+.model-img{width:110px;height:110px;object-fit:cover;border-radius:10px;border:2px solid var(--white);cursor:pointer;flex-shrink:0;transition:.2s}
+.model-img:hover{transform:scale(1.04)}
+.model-img-ph{width:110px;height:110px;border-radius:10px;background:var(--white);border:2px dashed var(--g3);display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:11px;color:var(--t4);flex-shrink:0;gap:4px}
+.rep-item{background:var(--white);border:1.5px solid var(--g2);border-radius:var(--r2);padding:14px;margin-bottom:10px;position:relative;padding-top:22px}
+.rep-item-num{position:absolute;top:-9px;left:12px;background:var(--pri);color:#fff;border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;font-family:'Mitr',sans-serif}
+.fbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.sin{flex:1;min-width:160px;padding:8px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:13px;outline:none;font-family:'Sarabun',sans-serif}
+.sin:focus{border-color:var(--pri)}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(5px)}
+.modal-box{background:var(--white);border-radius:16px;overflow:hidden;max-width:560px;width:100%;max-height:90vh;overflow-y:auto}
+.modal-img-el{width:100%;max-height:65vh;object-fit:contain;background:#111;display:block}
+.modal-body{padding:14px}
+.toast{position:fixed;bottom:20px;right:20px;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:sli .3s ease;color:#fff}
+.tok{background:var(--grn)}.terr{background:var(--red)}.tinfo{background:var(--blu)}
+@keyframes sli{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.empty{text-align:center;padding:40px 20px;color:var(--t3)}
+.empty-ico{font-size:44px;margin-bottom:10px}
+.pdfbtn{background:#DC2626;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:'Sarabun',sans-serif;box-shadow:0 2px 8px rgba(220,38,38,.3);transition:.15s}
+.pdfbtn:hover{background:#B91C1C}
+.imgbtn{background:#0D9488;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:'Sarabun',sans-serif;box-shadow:0 2px 8px rgba(13,148,136,.3);transition:.15s}
+.imgbtn:hover{background:#0f766e}
+.export-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;padding:14px;background:var(--white);border-radius:var(--r2);border:1px solid var(--g2);box-shadow:var(--sh)}
+/* loading overlay */
+.fb-loading{position:fixed;inset:0;background:rgba(255,255,255,.9);z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.fb-spinner{width:40px;height:40px;border:4px solid var(--pri-l);border-top-color:var(--pri);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fb-loading p{font-family:'Mitr',sans-serif;font-size:16px;color:var(--pri);font-weight:600}
+@media(max-width:580px){.g2,.g3{grid-template-columns:1fr}.sg{grid-template-columns:repeat(2,1fr)}.mgl{display:none}.model-head{flex-direction:column}}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- Firebase Loading -->
+<div id="fb-loading" class="fb-loading">
+  <div class="fb-spinner"></div>
+  <p>กำลังเชื่อมต่อ Firebase...</p>
+</div>
+
+<!-- LOGIN -->
+<div id="ls" class="ls" style="display:none">
+  <div class="lb">
+    <div class="logo-area">
+      <div id="logo-wrap" onclick="trigLogo()"></div>
+      <div class="logo-hint">กดโลโก้เพื่อเปลี่ยนรูป</div>
+      <input type="file" id="logo-inp" accept="image/*" style="display:none" onchange="handleLogo(event)">
+    </div>
+    <div class="app-title">OrderPro</div>
+    <div class="app-sub">เลือกบทบาทของคุณ</div>
+    <div class="role-card" onclick="selectRole('admin')"><div class="ri admin">👔</div><div><div class="rn">ผู้ดูแล</div><div class="rd">จัดการระบบ ดูสถิติ รายงานเต็ม</div></div></div>
+    <div class="role-card" onclick="selectRole('staff')"><div class="ri staff">✏️</div><div><div class="rn">เพิ่ม / แก้ไขออเดอร์</div><div class="rd">บันทึก เพิ่ม และจัดการออเดอร์</div></div></div>
+    <div class="role-card" onclick="loginAs('report')"><div class="ri report">📊</div><div><div class="rn">รายงาน</div><div class="rd">ดูรายงานลูกค้าและคำสั่งผลิต</div></div></div>
+  </div>
+</div>
+
+<!-- PIN -->
+<div id="ps" class="ps" style="display:none">
+  <div class="pb">
+    <div id="pt" class="pt"></div>
+    <div class="psub">กรอกรหัส 4 หลัก</div>
+    <div class="pdots" id="pdots"><div class="pdot" id="pd0"></div><div class="pdot" id="pd1"></div><div class="pdot" id="pd2"></div><div class="pdot" id="pd3"></div></div>
+    <div class="ppad">
+      <button class="pk" onclick="pKey('1')">1</button><button class="pk" onclick="pKey('2')">2</button><button class="pk" onclick="pKey('3')">3</button>
+      <button class="pk" onclick="pKey('4')">4</button><button class="pk" onclick="pKey('5')">5</button><button class="pk" onclick="pKey('6')">6</button>
+      <button class="pk" onclick="pKey('7')">7</button><button class="pk" onclick="pKey('8')">8</button><button class="pk" onclick="pKey('9')">9</button>
+      <button class="pk z" onclick="pKey('0')">0</button><button class="pk del" onclick="pDel()">⌫</button>
+    </div>
+    <div id="perr" class="perr"></div>
+    <span class="pback" onclick="backLogin()">← เลือกบทบาทอื่น</span>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none" class="app-shell">
+  <nav class="topbar">
+    <div class="brand"><div id="tbar-logo"></div><span class="brand-dot" id="conn-dot"></span>OrderPro</div>
+    <div id="rbadge" class="rbadge"></div>
+    <div class="spacer"></div>
+    <span id="sync-time" style="font-size:11px;color:var(--t4);margin-right:8px"></span>
+    <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
+  </nav>
+  <div id="menu-bar" class="menu-bar"></div>
+  <div class="main" id="main"></div>
+</div>
+
+<!-- IMG MODAL -->
+<div id="img-modal" class="modal-ov" style="display:none" onclick="closeIM(event)">
+  <div class="modal-box">
+    <img id="modal-img-el" src="" class="modal-img-el" alt="">
+    <div class="modal-body">
+      <div id="modal-actions" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <p id="modal-info" style="font-size:11px;color:var(--t3);margin-top:6px"></p>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast" style="display:none"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set, push, remove, update, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBBdB88C5ADhTXG7X44CXJxk47uTEiPrFw",
+  authDomain: "orderpro-app.firebaseapp.com",
+  databaseURL: "https://orderpro-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "orderpro-app",
+  storageBucket: "orderpro-app.firebasestorage.app",
+  messagingSenderId: "868986973931",
+  appId: "1:868986973931:web:4f88bd8495c8e4c443d8ae"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window._db = db;
+window._dbRef = ref;
+window._dbSet = set;
+window._dbPush = push;
+window._dbRemove = remove;
+window._dbUpdate = update;
+window._dbOnValue = onValue;
+window._dbServerTs = serverTimestamp;
+
+// Listen to orders realtime
+const ordersRef = ref(db, 'orders');
+onValue(ordersRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    // Convert object to array sorted by createdAt desc
+    window._orders = Object.entries(data)
+      .map(([id, val]) => ({ ...val, id }))
+      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  } else {
+    window._orders = [];
+  }
+  if (window._appReady) {
+    window._render();
+    window._updateSyncTime();
+    window._toast('🔄 ซิงค์ข้อมูลแล้ว', 'info');
+  }
+}, (error) => {
+  console.error('Firebase error:', error);
+  document.getElementById('conn-dot').classList.add('offline');
+});
+
+// Listen to logo
+const logoRef = ref(db, 'logo');
+onValue(logoRef, (snapshot) => {
+  const logo = snapshot.val();
+  if (logo) {
+    window._logoData = logo;
+    window._renderLogo && window._renderLogo();
+    window._renderTbarLogo && window._renderTbarLogo();
+  }
+});
+
+// Done loading
+setTimeout(() => {
+  document.getElementById('fb-loading').style.display = 'none';
+  document.getElementById('ls').style.display = 'flex';
+  window._appReady = false;
+  window._initApp();
+}, 1500);
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ── Global state ──
+window._orders = [];
+window._logoData = localStorage.getItem('op_logo') || '';
+window._appReady = false;
+
+const PINS = { admin: '1168' };
+const ROLE_META = {
+  admin: { label: 'ผู้ดูแล', icon: '👔', cls: 'admin' },
+  staff: { label: 'เพิ่ม/แก้ไขออเดอร์', icon: '✏️', cls: 'staff' },
+  report: { label: 'รายงาน', icon: '📊', cls: 'report' }
+};
+const MENUS = {
+  admin: [{ g: 'ออเดอร์', items: [{ id: 'orders', l: '📋 รายการ' }, { id: 'add', l: '➕ เพิ่ม' }] }, { g: 'รายงาน', items: [{ id: 'rep-cust', l: '👤 ลูกค้า' }, { id: 'rep-model', l: '👕 รุ่น' }] }, { g: 'ระบบ', items: [{ id: 'stats', l: '📊 สถิติ' }] }],
+  staff: [{ g: 'ออเดอร์', items: [{ id: 'orders', l: '📋 รายการ' }, { id: 'add', l: '➕ เพิ่ม' }] }],
+  report: [{ g: 'รายงาน', items: [{ id: 'rep-cust', l: '👤 ลูกค้า' }, { id: 'rep-model', l: '👕 รุ่น' }] }]
+};
+const SL = {
+  wait: { l: 'รอผลิต', c: 'bwait', sp: 'sp-wait' },
+  prod: { l: 'กำลังผลิต', c: 'bprod', sp: 'sp-prod' },
+  ready: { l: 'พร้อมส่ง', c: 'bready', sp: 'sp-ready' },
+  sent: { l: 'ส่งแล้ว', c: 'bsent', sp: 'sp-sent' },
+  issue: { l: 'มีปัญหา', c: 'bissue', sp: 'sp-issue' }
+};
+const STEPS4 = ['wait', 'prod', 'ready', 'sent'];
+const CHNL = ['LINE', 'Facebook', 'Instagram', 'TikTok', 'หน้าร้าน', 'อื่นๆ'];
+
+let curRole = null, curTab = 'orders', editId = null;
+let formImgs = [], modalCtx = null;
+let fSearch = '', fStatus = 'all', pinVal = '', pendingRole = null;
+let multiBlocks = null;
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+function stOpts(cur) { return Object.entries(SL).map(([k, v]) => `<option value="${k}" ${k === cur ? 'selected' : ''}>${v.l}</option>`).join(''); }
+function spill(s) { const x = SL[s] || SL.wait; return `<span class="sp ${x.sp}">${x.l}</span>`; }
+function newSub() { return { model: '', color: '', size: '', qty: '', status: 'wait', imgs: [], delivery: {}, payment: { paid: false } }; }
+function newMB() { return [{ name: '', channel: 'LINE', model: '', color: '', size: '', qty: '', date: new Date().toISOString().slice(0, 10), dueDate: '', deliveryDate: '', note: '', issue: '', imgs: [], subs: [], delivery: {}, payment: { paid: false } }]; }
+function dueDateBadge(d) { if (!d) return ''; const diff = Math.ceil((new Date(d) - new Date()) / 86400000); let cls = 'due-date-badge', ic = '📅'; if (diff < 0) { cls += ' urgent'; ic = '🔴'; } else if (diff <= 3) { cls += ' urgent'; ic = '⚠️'; } else { cls += ' ok'; ic = '✅'; } return `<span class="${cls}">${ic} ส่ง ${d}</span>`; }
+
+// ── Firebase save helpers ──
+async function fbSaveOrder(o) {
+  if (!window._db) return;
+  const r = window._dbRef(window._db, 'orders/' + o.id);
+  await window._dbSet(r, { ...o });
+}
+async function fbDeleteOrder(id) {
+  if (!window._db) return;
+  const r = window._dbRef(window._db, 'orders/' + id);
+  await window._dbRemove(r);
+}
+async function fbSaveLogo(data) {
+  if (!window._db) return;
+  localStorage.setItem('op_logo', data);
+  const r = window._dbRef(window._db, 'logo');
+  await window._dbSet(r, data);
+}
+
+// ── Logo ──
+window._renderLogo = function () {
+  const w = document.getElementById('logo-wrap'); if (!w) return;
+  const d = window._logoData;
+  w.innerHTML = d ? `<img src="${d}" class="logo-img"><div class="logo-eb">✏️</div>` : `<div class="logo-ph"><span>🧵</span><div class="logo-eb">📷</div></div>`;
+};
+function trigLogo() { document.getElementById('logo-inp').click(); }
+function handleLogo(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = ev => { fbSaveLogo(ev.target.result); toast('✅ เปลี่ยนโลโก้แล้ว'); }; r.readAsDataURL(f);
+}
+window._renderTbarLogo = function () {
+  const el = document.getElementById('tbar-logo'); if (!el) return;
+  el.innerHTML = window._logoData ? `<img src="${window._logoData}" class="brand-logo">` : `<span style="font-size:18px">🧵</span>`;
+};
+window._updateSyncTime = function () {
+  const el = document.getElementById('sync-time');
+  if (el) el.textContent = 'ซิงค์: ' + new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+};
+
+// ── Login ──
+function selectRole(role) {
+  if (PINS[role]) { pendingRole = role; pinVal = ''; updateDots(); document.getElementById('perr').textContent = ''; document.getElementById('pt').textContent = ROLE_META[role].icon + ' ' + ROLE_META[role].label; document.getElementById('ls').style.display = 'none'; document.getElementById('ps').style.display = 'flex'; } else loginAs(role);
+}
+function pKey(k) { if (pinVal.length >= 4) return; pinVal += k; updateDots(); if (pinVal.length === 4) setTimeout(checkPin, 140); }
+function pDel() { pinVal = pinVal.slice(0, -1); updateDots(); document.getElementById('perr').textContent = ''; }
+function updateDots() { for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.toggle('on', i < pinVal.length); }
+function checkPin() { if (pinVal === PINS[pendingRole]) loginAs(pendingRole); else { document.getElementById('perr').textContent = '❌ รหัสไม่ถูกต้อง'; pinVal = ''; updateDots(); } }
+function backLogin() { document.getElementById('ps').style.display = 'none'; document.getElementById('ls').style.display = 'flex'; pendingRole = null; pinVal = ''; }
+function loginAs(role) {
+  curRole = role; window._appReady = true;
+  document.getElementById('ps').style.display = 'none'; document.getElementById('ls').style.display = 'none'; document.getElementById('app').style.display = 'flex';
+  const m = ROLE_META[role]; document.getElementById('rbadge').textContent = m.icon + ' ' + m.label; document.getElementById('rbadge').className = 'rbadge ' + m.cls;
+  window._renderTbarLogo(); multiBlocks = newMB();
+  const first = (MENUS[role] || [])[0]?.items[0]?.id || 'orders'; buildMenu(first); goTab(first);
+}
+function logout() { curRole = null; curTab = 'orders'; editId = null; formImgs = []; multiBlocks = null; window._appReady = false; document.getElementById('app').style.display = 'none'; document.getElementById('ls').style.display = 'flex'; window._renderLogo(); }
+function buildMenu(active) {
+  const groups = MENUS[curRole] || [];
+  document.getElementById('menu-bar').innerHTML = groups.map((g, gi) => `${gi > 0 ? '<div class="msep"></div>' : ''}<div class="mgroup"><span class="mgl">${g.g}</span>${g.items.map(it => `<button class="mb ${it.id === (active || curTab) ? 'active' : ''}" onclick="goTab('${it.id}')">${it.l}</button>`).join('')}</div>`).join('');
+}
+function goTab(t) { curTab = t; buildMenu(t); render(); }
+window._render = render;
+function render() {
+  const el = document.getElementById('main'); if (!el) return;
+  if (curTab === 'orders') el.innerHTML = renderList();
+  else if (curTab === 'add') el.innerHTML = renderForm();
+  else if (curTab === 'rep-cust') el.innerHTML = renderRC();
+  else if (curTab === 'rep-model') el.innerHTML = renderRM();
+  else if (curTab === 'stats') el.innerHTML = renderStats();
+}
+
+// ── List ──
+function renderList() {
+  let list = [...window._orders];
+  if (fStatus !== 'all') list = list.filter(o => o.status === fStatus);
+  if (fSearch) list = list.filter(o => (o.name || '').includes(fSearch) || (o.model || '').includes(fSearch) || (o.color || '').includes(fSearch));
+  const tQ = list.reduce((s, o) => s + parseInt(o.qty || 0), 0);
+  const bf = Object.entries(SL).map(([k, v]) => `<button class="btn bxs ${fStatus === k ? 'bp' : 'bg'}" onclick="fStatus='${k}';render()">${v.l}</button>`).join('');
+  const canEdit = curRole === 'admin' || curRole === 'staff';
+  return `<div class="fbar"><input class="sin" placeholder="🔍 ค้นหา..." value="${fSearch}" oninput="fSearch=this.value;render()"><button class="btn bxs ${fStatus === 'all' ? 'bp' : 'bg'}" onclick="fStatus='all';render()">ทั้งหมด</button>${bf}</div>
+  <div style="font-size:12px;color:var(--t3);margin-bottom:10px">${list.length} รายการ • รวม <strong>${tQ}</strong> ตัว</div>
+  ${list.length ? list.map(o => renderOI(o, canEdit)).join('') : `<div class="empty"><div class="empty-ico">📦</div><p>ยังไม่มีออเดอร์</p></div>`}`;
+}
+
+function renderOI(o, canEdit) {
+  const st = SL[o.status] || SL.wait, si4 = STEPS4.indexOf(o.status);
+  const thumb = (o.imgs && o.imgs[0]) ? `<img src="${o.imgs[0]}" class="oi-thumb" onclick="openIM('${o.id}',0,'main')">` : `<div class="oi-ph" onclick="trigAddImg('${o.id}')"><span style="font-size:22px">📷</span><span style="font-size:10px;color:var(--t4)">เพิ่มรูป</span></div>`;
+  const extra = (o.imgs || []).slice(1).map((img, i) => `<img src="${img}" class="eimg" onclick="openIM('${o.id}',${i + 1},'main')">`).join('');
+  const steps = STEPS4.map((s, i) => { const cl = i < si4 ? 'done' : i === si4 ? 'cur' : ''; const lb = { wait: 'รอ', prod: 'ผลิต', ready: 'พร้อม', sent: 'ส่ง' }[s]; return `<div class="step"><div class="sdot ${cl}">${i < si4 ? '✓' : i + 1}</div><div class="slbl ${cl}">${lb}</div></div>`; }).join('');
+  const pay = o.payment || {}; const del = o.delivery || {};
+  const delSection = canEdit ? `<div class="del-section"><div class="del-title">📦 ติดตามการส่งของ — รายการที่ 1</div><div class="g2" style="gap:8px;margin-bottom:8px"><div class="fg" style="margin-bottom:0"><label>ผู้ส่ง</label><input placeholder="ชื่อผู้ส่ง" value="${del.sender || ''}" onchange="updDelField('${o.id}','main',-1,'sender',this.value)"></div><div class="fg" style="margin-bottom:0"><label>ผู้รับ</label><input placeholder="ชื่อผู้รับ" value="${del.receiver || ''}" onchange="updDelField('${o.id}','main',-1,'receiver',this.value)"></div></div><div class="fg" style="margin-bottom:8px"><label>หมายเหตุการส่ง</label><input placeholder="เช่น ส่ง Kerry เลขพัสดุ..." value="${del.note || ''}" onchange="updDelField('${o.id}','main',-1,'note',this.value)"></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${(del.proofs || []).map((img, ii) => `<img src="${img}" class="del-proof-img" onclick="bigImg('${img}')">`).join('')}<label class="btn bg bxs" style="cursor:pointer">📷 หลักฐานส่ง<input type="file" accept="image/*" style="display:none" onchange="addDelProof('${o.id}','main',-1,event)"></label></div></div>` : '';
+  const infoSection = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center;font-size:12px">${o.dueDate ? `<span style="color:var(--t3)">📅 ต้องการรับ: <strong>${o.dueDate}</strong></span>` : ''}${o.deliveryDate ? `<span style="color:var(--t3)">🚚 กำหนดส่ง: <strong>${o.deliveryDate}</strong></span>` : ''}<span class="${pay.paid ? 'pay-paid' : 'pay-unpaid'}">${pay.paid ? '✅ จ่ายแล้ว' : '⏳ ยังไม่จ่าย'}</span></div>`;
+  const subs = (o.subs || []);
+  const subItems = subs.map((s, si2) => {
+    const sSi4 = STEPS4.indexOf(s.status || 'wait');
+    const sThumb = (s.imgs && s.imgs[0]) ? `<img src="${s.imgs[0]}" class="sub-thumb" onclick="openIM('${o.id}',0,'sub',${si2})">` : `<div class="sub-ph"><span style="font-size:22px">📷</span><span style="font-size:10px;color:var(--t4)">ไม่มีรูป</span></div>`;
+    const sExtra = (s.imgs || []).slice(1).map((img, ii) => `<img src="${img}" class="eimg" onclick="openIM('${o.id}',${ii + 1},'sub',${si2})">`).join('');
+    const sSteps = STEPS4.map((st, i) => { const cl = i < sSi4 ? 'done' : i === sSi4 ? 'cur' : ''; const lb = { wait: 'รอ', prod: 'ผลิต', ready: 'พร้อม', sent: 'ส่ง' }[st]; return `<div class="step"><div class="sdot ${cl}">${i < sSi4 ? '✓' : i + 1}</div><div class="slbl ${cl}">${lb}</div></div>`; }).join('');
+    const sDel = s.delivery || {}; const sPay = s.payment || {};
+    const sDelSection = canEdit ? `<div class="del-section"><div class="del-title">📦 ติดตามการส่งของ — รายการที่ ${si2 + 2}</div><div class="g2" style="gap:8px;margin-bottom:8px"><div class="fg" style="margin-bottom:0"><label>ผู้ส่ง</label><input placeholder="ชื่อผู้ส่ง" value="${sDel.sender || ''}" onchange="updDelField('${o.id}','sub',${si2},'sender',this.value)"></div><div class="fg" style="margin-bottom:0"><label>ผู้รับ</label><input placeholder="ชื่อผู้รับ" value="${sDel.receiver || ''}" onchange="updDelField('${o.id}','sub',${si2},'receiver',this.value)"></div></div><div class="fg" style="margin-bottom:8px"><label>หมายเหตุการส่ง</label><input placeholder="เช่น ส่ง Kerry เลขพัสดุ..." value="${sDel.note || ''}" onchange="updDelField('${o.id}','sub',${si2},'note',this.value)"></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${(sDel.proofs || []).map((img, ii) => `<img src="${img}" class="del-proof-img" onclick="bigImg('${img}')">`).join('')}<label class="btn bg bxs" style="cursor:pointer">📷 หลักฐานส่ง<input type="file" accept="image/*" style="display:none" onchange="addDelProof('${o.id}','sub',${si2},event)"></label></div></div>` : '';
+    return `<div class="sub-item"><div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><span class="num-b sub">${si2 + 2}</span><strong style="font-size:13px">รายการที่ ${si2 + 2}</strong></div><div class="oi-hd">${sThumb}<div class="oi-info"><div class="oi-name" style="font-size:14px">${o.name}</div><div class="oi-meta">${o.channel || ''}</div><div class="oi-tags">${s.model ? `<span class="tag tmod">👕 ${s.model}</span>` : ''}${s.color ? `<span class="tag tcol">🎨 ${s.color}</span>` : ''}${s.size ? `<span class="tag">📏 ${s.size}</span>` : ''}${s.qty ? `<span class="tag tqty">×${s.qty} ตัว</span>` : ''}${spill(s.status || 'wait')}</div>${sExtra ? `<div class="extra-imgs">${sExtra}</div>` : ''}</div></div><div class="steps">${sSteps}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center;font-size:12px"><span class="${sPay.paid ? 'pay-paid' : 'pay-unpaid'}">${sPay.paid ? '✅ จ่ายแล้ว' : '⏳ ยังไม่จ่าย'}</span>${canEdit ? `<button class="btn bg bxs" onclick="togglePay('${o.id}','sub',${si2})">${sPay.paid ? 'ยกเลิกจ่าย' : '💳 จ่ายแล้ว'}</button>` : ''}</div>${canEdit ? `<div class="sub-status-row"><span style="font-size:11px;color:var(--t3);font-weight:600">อัปเดทสถานะ:</span><select class="btn bg bxs" style="border:1px solid var(--g2);font-size:11px;padding:4px 8px" onchange="updSubSt('${o.id}',${si2},this.value)">${stOpts(s.status || 'wait')}</select><label class="btn bg bxs" style="cursor:pointer;font-size:11px;padding:4px 8px">📷 เพิ่มรูป<input type="file" accept="image/*" multiple style="display:none" onchange="addSubImg('${o.id}',${si2},event)"></label><button class="btn br bxs" style="font-size:11px;padding:4px 8px" onclick="delSub('${o.id}',${si2})">🗑 ลบ</button></div>` : ''}${sDelSection}</div>`;
+  }).join('');
+  return `<div class="oi" id="oi-${o.id}"><div style="display:flex;align-items:center;gap:6px;margin-bottom:10px"><span class="num-b">1</span><strong style="font-size:12px;color:var(--t3)">รายการที่ 1</strong></div><div class="oi-hd">${thumb}<div class="oi-info"><div class="oi-name">${o.name}</div><div class="oi-meta">📱 ${o.channel || ''} • 📅 ${o.date || ''}</div><div class="oi-tags"><span class="tag tmod">👕 ${o.model}</span>${o.color ? `<span class="tag tcol">🎨 ${o.color}</span>` : ''}${o.size ? `<span class="tag">📏 ${o.size}</span>` : ''}<span class="tag tqty">×${o.qty} ตัว</span><span class="badge ${st.c}">${st.l}</span></div>${extra ? `<div class="extra-imgs">${extra}</div>` : ''}${o.note ? `<div style="font-size:12px;color:var(--t3);margin-top:5px">📝 ${o.note}</div>` : ''}${o.issue ? `<div style="font-size:12px;color:var(--red);margin-top:4px;font-weight:500">⚠️ ${o.issue}</div>` : ''}</div></div><div class="steps">${steps}</div>${infoSection}${canEdit ? `<div class="oi-actions"><select class="btn bg bxs" style="border:1px solid var(--g2)" onchange="updSt('${o.id}',this.value)">${stOpts(o.status)}</select><button class="btn bg bxs" onclick="togglePay('${o.id}','main',-1)">${pay.paid ? 'ยกเลิกจ่าย' : '💳 จ่ายแล้ว'}</button><button class="btn bg bxs" onclick="startEdit('${o.id}')">✏️ แก้ไข</button><label class="btn bg bxs" style="cursor:pointer">📷 เพิ่มรูป<input type="file" accept="image/*" multiple style="display:none" onchange="addImgs('${o.id}',event)"></label><button class="btn bg bxs" onclick="addSubInline('${o.id}')">➕ เพิ่มรายการ</button><button class="btn br bxs" onclick="delOrd('${o.id}')">🗑</button></div>` : ''}${delSection}${subItems}</div>`;
+}
+
+// ── Firebase data actions ──
+function updDelField(oid, type, si, field, val) {
+  const o = window._orders.find(x => x.id === oid); if (!o) return;
+  if (type === 'main') { if (!o.delivery) o.delivery = {}; o.delivery[field] = val; }
+  else { if (!o.subs[si].delivery) o.subs[si].delivery = {}; o.subs[si].delivery[field] = val; }
+  fbSaveOrder(o);
+}
+function addDelProof(oid, type, si, e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = ev => {
+    const o = window._orders.find(x => x.id === oid); if (!o) return;
+    if (type === 'main') { if (!o.delivery) o.delivery = {}; if (!o.delivery.proofs) o.delivery.proofs = []; o.delivery.proofs.push(ev.target.result); }
+    else { if (!o.subs[si].delivery) o.subs[si].delivery = {}; if (!o.subs[si].delivery.proofs) o.subs[si].delivery.proofs = []; o.subs[si].delivery.proofs.push(ev.target.result); }
+    fbSaveOrder(o);
+  }; r.readAsDataURL(f);
+}
+function togglePay(oid, type, si) {
+  const o = window._orders.find(x => x.id === oid); if (!o) return;
+  if (type === 'main') { if (!o.payment) o.payment = {}; o.payment.paid = !o.payment.paid; }
+  else { if (!o.subs[si].payment) o.subs[si].payment = {}; o.subs[si].payment.paid = !o.subs[si].payment.paid; }
+  fbSaveOrder(o); toast('✅ บันทึกสถานะชำระเงิน');
+}
+function addSubInline(oid) { const o = window._orders.find(x => x.id === oid); if (!o.subs) o.subs = []; o.subs.push(newSub()); fbSaveOrder(o); }
+function addSubImg(oid, si, e) {
+  const o = window._orders.find(x => x.id === oid); if (!o || !o.subs[si]) return;
+  if (!o.subs[si].imgs) o.subs[si].imgs = [];
+  Array.from(e.target.files).forEach(f => { const r = new FileReader(); r.onload = ev => { o.subs[si].imgs.push(ev.target.result); fbSaveOrder(o); }; r.readAsDataURL(f); });
+}
+function delSub(oid, si) { if (!confirm('ลบรายการนี้?')) return; const o = window._orders.find(x => x.id === oid); o.subs.splice(si, 1); fbSaveOrder(o); toast('🗑 ลบแล้ว'); }
+function updSubSt(oid, si, status) { const o = window._orders.find(x => x.id === oid); if (o && o.subs[si]) { o.subs[si].status = status; fbSaveOrder(o); toast('✅ อัปเดทสถานะรายการที่ ' + (si + 2)); } }
+function updSt(id, s) { const o = window._orders.find(x => x.id === id); if (o) { o.status = s; fbSaveOrder(o); toast('✅ อัปเดทสถานะ'); } }
+function addImgs(id, e) {
+  const o = window._orders.find(x => x.id === id); if (!o.imgs) o.imgs = [];
+  Array.from(e.target.files).forEach(f => { const r = new FileReader(); r.onload = ev => { o.imgs.push(ev.target.result); fbSaveOrder(o); }; r.readAsDataURL(f); });
+}
+function trigAddImg(id) { const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.multiple = true; i.onchange = e => addImgs(id, e); i.click(); }
+async function delOrd(id) { if (!confirm('ยืนยันลบออเดอร์?')) return; await fbDeleteOrder(id); toast('🗑 ลบแล้ว'); }
+
+// ── Form ──
+function renderForm() {
+  if (editId) {
+    const o = window._orders.find(x => x.id === editId);
+    return `<div class="card"><div class="card-title">✏️ แก้ไขออเดอร์ — ${o.name}</div>${mainFields(o, 'f_')}<div class="fg"><label>รูปภาพ</label><label class="upzone" style="display:block;cursor:pointer"><div style="font-size:26px">📷</div><div style="font-size:12px;color:var(--t3);margin-top:4px">อัปโหลดหรือเลือกจากแกลเลอรี่</div><input type="file" accept="image/*" multiple style="display:none" onchange="handleFImgs(event)"></label><div class="igrid" id="fimg-grid">${formImgs.map((img, i) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmFImg(${i})">✕</button></div>`).join('')}</div></div><div class="btn-row"><button class="btn bp" onclick="saveEdit()">💾 บันทึกการแก้ไข</button><button class="btn bg" onclick="cancelEdit()">ยกเลิก</button></div></div>`;
+  }
+  const blocks = multiBlocks.map((b, bi) => `<div class="order-block" id="blk-${bi}"><div class="obn">ออเดอร์ที่ ${bi + 1}</div>${bi > 0 ? `<button class="ob-del-btn" onclick="rmBlock(${bi})">✕ ลบ</button>` : ''}${mainFields(b, 'b' + bi + '_')}<div class="fg"><label>รูปภาพ</label><label class="upzone" style="display:block;cursor:pointer"><div style="font-size:22px">📷</div><div style="font-size:12px;color:var(--t3);margin-top:2px">อัปโหลดหรือเลือกจากแกลเลอรี่</div><input type="file" accept="image/*" multiple style="display:none" onchange="handleBI(${bi},event)"></label><div class="igrid" id="bimg-${bi}">${(b.imgs || []).map((img, ii) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmBI(${bi},${ii})">✕</button></div>`).join('')}</div></div><div style="margin-top:14px;padding-top:14px;border-top:1.5px dashed var(--g3)"><div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">➕ เพิ่มรายการ</div><div id="sub-list-${bi}">${(b.subs || []).map((s, si) => renderSubForm(bi, si, s)).join('')}</div><button class="add-sub-btn" onclick="addSubBlock(${bi})">➕ เพิ่มรายการ</button></div></div>`).join('');
+  return `<div class="card"><div class="card-title">➕ เพิ่มออเดอร์ใหม่</div><div style="font-size:12px;color:var(--t3);margin-bottom:14px">เพิ่มได้หลายออเดอร์พร้อมกัน</div><div id="blks">${blocks}</div><button class="add-blk" onclick="addBlock()">＋ เพิ่มออเดอร์อีก 1 รายการ</button><div class="btn-row"><button class="btn bp" onclick="saveMulti()">💾 บันทึกทั้งหมด (${multiBlocks.length} ออเดอร์)</button><button class="btn bg" onclick="clearAllBlocks()">🔄 ล้างทั้งหมด</button></div></div>`;
+}
+function mainFields(o, p) {
+  return `<div class="g2" style="margin-bottom:10px"><div class="fg"><label>ชื่อลูกค้า *</label><input id="${p}name" placeholder="ชื่อลูกค้า" value="${o.name || ''}"></div><div class="fg"><label>ช่องทาง</label><select id="${p}ch">${CHNL.map(c => `<option ${o.channel === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div></div><div class="g3" style="margin-bottom:10px"><div class="fg"><label>รุ่นเสื้อ *</label><input id="${p}mod" placeholder="ทิวลิป..." value="${o.model || ''}"></div><div class="fg"><label>สี</label><input id="${p}col" placeholder="สีเอ..." value="${o.color || ''}"></div><div class="fg"><label>ไซส์</label><input id="${p}sz" placeholder="M/L/XL" value="${o.size || ''}"></div></div><div class="g2" style="margin-bottom:10px"><div class="fg"><label>จำนวน *</label><input id="${p}qty" type="number" min="1" value="${o.qty || ''}"></div><div class="fg"><label>วันที่รับออเดอร์</label><input id="${p}dt" type="date" value="${o.date || new Date().toISOString().slice(0, 10)}"></div></div><div class="g2" style="margin-bottom:10px"><div class="fg"><label>📅 ลูกค้าต้องการรับวันที่</label><input id="${p}due" type="date" value="${o.dueDate || ''}"></div><div class="fg"><label>🚚 กำหนดจัดส่งวันที่</label><input id="${p}deldate" type="date" value="${o.deliveryDate || ''}"></div></div><div class="fg"><label>สถานะชำระเงิน</label><select id="${p}paid"><option value="0" ${!(o.payment && o.payment.paid) ? 'selected' : ''}>⏳ ยังไม่จ่าย</option><option value="1" ${(o.payment && o.payment.paid) ? 'selected' : ''}>✅ จ่ายแล้ว</option></select></div><div class="fg"><label>หมายเหตุ</label><input id="${p}note" value="${o.note || ''}"></div><div class="fg"><label>แจ้งปัญหา</label><input id="${p}iss" value="${o.issue || ''}"></div>`;
+}
+function renderSubForm(bi, si, s) {
+  return `<div class="sub-form-block" id="sub-${bi}-${si}"><div class="sub-form-num">รายการที่ ${si + 2}</div><button class="sub-form-del" onclick="rmSubBlock(${bi},${si})">✕ ลบ</button><div class="g2" style="margin-bottom:8px;margin-top:4px"><div class="sf"><label>รุ่นเสื้อ</label><input id="s${bi}_${si}_mod" placeholder="ทิวลิป..." value="${s.model || ''}"></div><div class="sf"><label>สี</label><input id="s${bi}_${si}_col" placeholder="สีเอ..." value="${s.color || ''}"></div></div><div class="g2" style="margin-bottom:8px"><div class="sf"><label>ไซส์</label><input id="s${bi}_${si}_sz" placeholder="M/L/XL" value="${s.size || ''}"></div><div class="sf"><label>จำนวน (ตัว)</label><input id="s${bi}_${si}_qty" type="number" min="1" placeholder="0" value="${s.qty || ''}"></div></div><label class="upzone" style="display:block;cursor:pointer;padding:10px"><div style="font-size:18px">📷</div><div style="font-size:11px;color:var(--t3)">อัปโหลดหรือเลือกจากแกลเลอรี่</div><input type="file" accept="image/*" multiple style="display:none" onchange="handleSubBI(${bi},${si},event)"></label><div class="igrid" id="subimg-${bi}-${si}">${(s.imgs || []).map((img, ii) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmSubImg(${bi},${si},${ii})">✕</button></div>`).join('')}</div></div>`;
+}
+function readFields(p) {
+  const g = id => (document.getElementById(p + id) || {}).value || '';
+  const paid = (document.getElementById(p + 'paid') || {}).value === '1';
+  return { name: g('name').trim(), channel: g('ch'), model: g('mod').trim(), color: g('col'), size: g('sz'), qty: parseInt(g('qty')) || 0, date: g('dt'), dueDate: g('due'), deliveryDate: g('deldate'), note: g('note'), issue: g('iss'), payment: { paid } };
+}
+function readSubFields(bi, si) {
+  const g = id => (document.getElementById(id) || {}).value || '';
+  return { model: g(`s${bi}_${si}_mod`).trim(), color: g(`s${bi}_${si}_col`), size: g(`s${bi}_${si}_sz`), qty: parseInt(g(`s${bi}_${si}_qty`)) || 0, status: 'wait', imgs: [...(multiBlocks[bi].subs[si].imgs || [])], delivery: {}, payment: { paid: false } };
+}
+function syncDOM() {
+  if (!multiBlocks) return;
+  multiBlocks.forEach((b, bi) => {
+    const g = id => (document.getElementById(id) || {}).value;
+    b.name = g('b' + bi + '_name') ?? b.name; b.channel = g('b' + bi + '_ch') ?? b.channel;
+    b.model = g('b' + bi + '_mod') ?? b.model; b.color = g('b' + bi + '_col') ?? b.color;
+    b.size = g('b' + bi + '_sz') ?? b.size; b.qty = g('b' + bi + '_qty') ?? b.qty;
+    b.date = g('b' + bi + '_dt') ?? b.date; b.dueDate = g('b' + bi + '_due') ?? b.dueDate;
+    b.deliveryDate = g('b' + bi + '_deldate') ?? b.deliveryDate;
+    b.note = g('b' + bi + '_note') ?? b.note; b.issue = g('b' + bi + '_iss') ?? b.issue;
+    (b.subs || []).forEach((s, si) => { s.model = g('s' + bi + '_' + si + '_mod') ?? s.model; s.color = g('s' + bi + '_' + si + '_col') ?? s.color; s.size = g('s' + bi + '_' + si + '_sz') ?? s.size; s.qty = g('s' + bi + '_' + si + '_qty') ?? s.qty; });
+  });
+}
+function addBlock() { syncDOM(); multiBlocks.push({ ...newMB()[0] }); render(); setTimeout(() => document.getElementById('blks')?.lastElementChild?.scrollIntoView({ behavior: 'smooth' }), 100); }
+function rmBlock(bi) { syncDOM(); multiBlocks.splice(bi, 1); render(); }
+function addSubBlock(bi) { syncDOM(); if (!multiBlocks[bi].subs) multiBlocks[bi].subs = []; multiBlocks[bi].subs.push(newSub()); render(); setTimeout(() => document.getElementById(`sub-list-${bi}`)?.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80); }
+function rmSubBlock(bi, si) { syncDOM(); multiBlocks[bi].subs.splice(si, 1); render(); }
+function clearAllBlocks() { multiBlocks = newMB(); render(); }
+function handleSubBI(bi, si, e) { Array.from(e.target.files).forEach(f => { const r = new FileReader(); r.onload = ev => { if (!multiBlocks[bi].subs[si].imgs) multiBlocks[bi].subs[si].imgs = []; multiBlocks[bi].subs[si].imgs.push(ev.target.result); const g = document.getElementById(`subimg-${bi}-${si}`); if (g) g.innerHTML = (multiBlocks[bi].subs[si].imgs || []).map((img, ii) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmSubImg(${bi},${si},${ii})">✕</button></div>`).join(''); }; r.readAsDataURL(f); }); }
+function rmSubImg(bi, si, ii) { multiBlocks[bi].subs[si].imgs.splice(ii, 1); const g = document.getElementById(`subimg-${bi}-${si}`); if (g) g.innerHTML = (multiBlocks[bi].subs[si].imgs || []).map((img, iix) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmSubImg(${bi},${si},${iix})">✕</button></div>`).join(''); }
+function handleFImgs(e) { Array.from(e.target.files).forEach(f => { const r = new FileReader(); r.onload = ev => { formImgs.push(ev.target.result); const g = document.getElementById('fimg-grid'); if (g) g.innerHTML = formImgs.map((img, i) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmFImg(${i})">✕</button></div>`).join(''); }; r.readAsDataURL(f); }); }
+function rmFImg(i) { formImgs.splice(i, 1); const g = document.getElementById('fimg-grid'); if (g) g.innerHTML = formImgs.map((img, ix) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmFImg(${ix})">✕</button></div>`).join(''); }
+function handleBI(bi, e) { Array.from(e.target.files).forEach(f => { const r = new FileReader(); r.onload = ev => { if (!multiBlocks[bi].imgs) multiBlocks[bi].imgs = []; multiBlocks[bi].imgs.push(ev.target.result); const g = document.getElementById('bimg-' + bi); if (g) g.innerHTML = (multiBlocks[bi].imgs || []).map((img, ii) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmBI(${bi},${ii})">✕</button></div>`).join(''); }; r.readAsDataURL(f); }); }
+function rmBI(bi, ii) { multiBlocks[bi].imgs.splice(ii, 1); const g = document.getElementById('bimg-' + bi); if (g) g.innerHTML = (multiBlocks[bi].imgs || []).map((img, iix) => `<div class="iwrap"><img src="${img}" class="iprev" onclick="bigImg('${img}')"><button class="idel" onclick="rmBI(${bi},${iix})">✕</button></div>`).join(''); }
+async function saveMulti() {
+  syncDOM();
+  for (let bi = 0; bi < multiBlocks.length; bi++) {
+    const d = readFields('b' + bi + '_');
+    if (!d.name || !d.model || !d.qty) { toast(`⚠️ ออเดอร์ที่ ${bi + 1}: กรอกชื่อ รุ่น จำนวน`, false); return; }
+    const subs = (multiBlocks[bi].subs || []).map((_, si) => readSubFields(bi, si));
+    const id = uid();
+    const order = { id, status: 'wait', subs, delivery: {}, payment: { paid: false }, createdAt: Date.now(), ...d, imgs: [...(multiBlocks[bi].imgs || [])] };
+    await fbSaveOrder(order);
+  }
+  toast(`✅ บันทึก ${multiBlocks.length} ออเดอร์`); multiBlocks = newMB(); goTab('orders');
+}
+function startEdit(id) { editId = id; const o = window._orders.find(x => x.id === id); formImgs = [...(o.imgs || [])]; goTab('add'); }
+function cancelEdit() { editId = null; formImgs = []; goTab('orders'); }
+async function saveEdit() {
+  const d = readFields('f_');
+  if (!d.name || !d.model || !d.qty) { toast('⚠️ กรอกชื่อ รุ่น จำนวน', false); return; }
+  const o = window._orders.find(x => x.id === editId);
+  const updated = { ...o, ...d, imgs: formImgs.length ? [...formImgs] : (o.imgs || []) };
+  await fbSaveOrder(updated); toast('✅ แก้ไขสำเร็จ'); editId = null; formImgs = []; goTab('orders');
+}
+
+// ── IMG MODAL ──
+function openIM(oid, idx, type, subIdx) {
+  modalCtx = { oid, idx, type, subIdx }; const o = window._orders.find(x => x.id === oid);
+  let src, total, name;
+  if (type === 'sub') { const s = o.subs[subIdx]; src = s && s.imgs && s.imgs[idx]; total = (s && s.imgs || []).length; name = o.name + ' รายการที่ ' + (subIdx + 2); }
+  else { src = o && o.imgs && o.imgs[idx]; total = (o && o.imgs || []).length; name = o.name + ' รายการที่ 1'; }
+  if (!src) return;
+  document.getElementById('modal-img-el').src = src;
+  document.getElementById('modal-info').textContent = `รูปที่ ${idx + 1}/${total} | ${name}`;
+  const ce = curRole === 'admin' || curRole === 'staff';
+  document.getElementById('modal-actions').innerHTML = ce ? `<label class="btn bg bsm" style="cursor:pointer">📷 เปลี่ยนรูป<input type="file" accept="image/*" style="display:none" onchange="changeIM(event)"></label><button class="btn br bsm" onclick="deleteIM()">🗑 ลบรูป</button><button class="btn bg bsm" onclick="closeIML()">✕ ปิด</button>` : `<button class="btn bg bsm" onclick="closeIML()">✕ ปิด</button>`;
+  document.getElementById('img-modal').style.display = 'flex';
+}
+function bigImg(src) { modalCtx = null; document.getElementById('modal-img-el').src = src; document.getElementById('modal-info').textContent = ''; document.getElementById('modal-actions').innerHTML = `<button class="btn bg bsm" onclick="closeIML()">✕ ปิด</button>`; document.getElementById('img-modal').style.display = 'flex'; }
+function closeIML() { document.getElementById('img-modal').style.display = 'none'; }
+function closeIM(e) { if (!e || e.target.id === 'img-modal') closeIML(); }
+function changeIM(e) {
+  if (!modalCtx) return; const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = ev => {
+    const o = window._orders.find(x => x.id === modalCtx.oid);
+    if (modalCtx.type === 'sub') o.subs[modalCtx.subIdx].imgs[modalCtx.idx] = ev.target.result;
+    else o.imgs[modalCtx.idx] = ev.target.result;
+    fbSaveOrder(o); toast('✅ เปลี่ยนรูปแล้ว'); document.getElementById('modal-img-el').src = ev.target.result;
+  }; r.readAsDataURL(f);
+}
+function deleteIM() {
+  if (!modalCtx || !confirm('ลบรูปนี้?')) return;
+  const o = window._orders.find(x => x.id === modalCtx.oid);
+  if (modalCtx.type === 'sub') o.subs[modalCtx.subIdx].imgs.splice(modalCtx.idx, 1);
+  else o.imgs.splice(modalCtx.idx, 1);
+  fbSaveOrder(o); toast('🗑 ลบรูปแล้ว'); closeIML();
+}
+
+// ── Report Customer ──
+function renderRC() {
+  const custs = [...new Set(window._orders.map(o => o.name))].sort();
+  if (!custs.length) return `<div class="empty"><div class="empty-ico">👤</div><p>ยังไม่มีลูกค้า</p></div>`;
+  const sel = window._rc || custs[0]; const cos = window._orders.filter(o => o.name === sel);
+  const totQ = cos.reduce((s, o) => s + o.qty + ((o.subs || []).reduce((ss, sb) => ss + (parseInt(sb.qty) || 0), 0)), 0);
+  const mb = {}; cos.forEach(o => { const k = `${o.model}||${o.color || ''}`; if (!mb[k]) mb[k] = { model: o.model, color: o.color, qty: 0 }; mb[k].qty += o.qty; (o.subs || []).forEach(s => { const sk = `${s.model || o.model}||${s.color || ''}`; if (!mb[sk]) mb[sk] = { model: s.model || o.model, color: s.color, qty: 0 }; mb[sk].qty += (parseInt(s.qty) || 0); }); });
+  const ce = curRole === 'admin' || curRole === 'staff';
+  let itemNum = 0;
+  const allItems = cos.map(o => {
+    const st = SL[o.status] || SL.wait; const pay = o.payment || {}; const del = o.delivery || {};
+    itemNum++; const num = itemNum;
+    const imgs = o.imgs || [];
+    const imgSection = imgs.length ? imgs.map((img, ii) => `<img src="${img}" class="rep-img" onclick="openIM('${o.id}',${ii},'main')">`).join('') : `<div style="background:var(--g1);border-radius:10px;height:140px;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:13px;margin-bottom:10px">ยังไม่มีรูปภาพ</div>`;
+    const si4 = STEPS4.indexOf(o.status);
+    const steps = STEPS4.map((s, i) => { const cl = i < si4 ? 'done' : i === si4 ? 'cur' : ''; const lb = { wait: 'รอ', prod: 'ผลิต', ready: 'พร้อม', sent: 'ส่ง' }[s]; return `<div class="step"><div class="sdot ${cl}">${i < si4 ? '✓' : i + 1}</div><div class="slbl ${cl}">${lb}</div></div>`; }).join('');
+    const table = `<table class="tbl" style="margin-top:8px"><tr><td style="color:var(--t3);width:130px">ลูกค้า</td><td><strong>${o.name}</strong></td></tr><tr><td style="color:var(--t3)">รุ่น</td><td><strong>${o.model}</strong></td></tr>${o.color ? `<tr><td style="color:var(--t3)">สี</td><td>${o.color}</td></tr>` : ''}${o.size ? `<tr><td style="color:var(--t3)">ไซส์</td><td>${o.size}</td></tr>` : ''}<tr><td style="color:var(--t3)">จำนวน</td><td><strong style="color:var(--pri);font-size:16px">${o.qty} ตัว</strong></td></tr><tr><td style="color:var(--t3)">สถานะ</td><td>${spill(o.status)}</td></tr><tr><td style="color:var(--t3)">ชำระเงิน</td><td><span class="${pay.paid ? 'pay-paid' : 'pay-unpaid'}">${pay.paid ? '✅ จ่ายแล้ว' : '⏳ ยังไม่จ่าย'}</span></td></tr>${o.dueDate ? `<tr><td style="color:var(--t3)">ต้องการรับ</td><td>${o.dueDate}</td></tr>` : ''}${o.deliveryDate ? `<tr><td style="color:var(--t3)">กำหนดส่ง</td><td>${o.deliveryDate}</td></tr>` : ''}${del.sender ? `<tr><td style="color:var(--t3)">ผู้ส่ง</td><td>${del.sender}</td></tr>` : ''}${del.receiver ? `<tr><td style="color:var(--t3)">ผู้รับ</td><td>${del.receiver}</td></tr>` : ''}${del.note ? `<tr><td style="color:var(--t3)">หมายเหตุส่ง</td><td>${del.note}</td></tr>` : ''}${o.note ? `<tr><td style="color:var(--t3)">หมายเหตุ</td><td>${o.note}</td></tr>` : ''}${o.issue ? `<tr><td style="color:var(--red)">ปัญหา</td><td style="color:var(--red)">${o.issue}</td></tr>` : ''}</table>${(del.proofs || []).length ? `<div style="margin-top:8px"><div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:6px">หลักฐานการส่ง</div><div style="display:flex;gap:8px;flex-wrap:wrap">${(del.proofs || []).map(img => `<img src="${img}" style="width:80px;height:80px;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid var(--g2)" onclick="bigImg('${img}')">`).join('')}</div></div>` : ''}`;
+    const subHTML = (o.subs || []).map((s, si2) => {
+      itemNum++; const snum = itemNum; const sImgs = (s.imgs || []); const sDel = s.delivery || {}; const sPay = s.payment || {};
+      const sImgSection = sImgs.length ? sImgs.map((img, ii) => `<img src="${img}" class="rep-img" onclick="openIM('${o.id}',${ii},'sub',${si2})">`).join('') : `<div style="background:var(--g1);border-radius:10px;height:140px;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:13px;margin-bottom:10px">ยังไม่มีรูปภาพ</div>`;
+      const sSi4 = STEPS4.indexOf(s.status || 'wait');
+      const sSteps = STEPS4.map((st, i) => { const cl = i < sSi4 ? 'done' : i === sSi4 ? 'cur' : ''; const lb = { wait: 'รอ', prod: 'ผลิต', ready: 'พร้อม', sent: 'ส่ง' }[st]; return `<div class="step"><div class="sdot ${cl}">${i < sSi4 ? '✓' : i + 1}</div><div class="slbl ${cl}">${lb}</div></div>`; }).join('');
+      return `<div class="rep-item" style="border-left:3px solid var(--teal)"><div class="rep-item-num" style="background:var(--teal)">${snum}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px"><span style="font-family:'Mitr',sans-serif;font-size:14px;font-weight:500">รายการที่ ${snum} — ${s.model || '-'}${s.color ? ' / ' + s.color : ''}</span>${spill(s.status || 'wait')}</div><div class="steps">${sSteps}</div>${sImgSection}<table class="tbl"><tr><td style="color:var(--t3);width:130px">ลูกค้า</td><td><strong>${o.name}</strong></td></tr><tr><td style="color:var(--t3)">รุ่น</td><td><strong>${s.model || '-'}</strong></td></tr>${s.color ? `<tr><td style="color:var(--t3)">สี</td><td>${s.color}</td></tr>` : ''}${s.size ? `<tr><td style="color:var(--t3)">ไซส์</td><td>${s.size}</td></tr>` : ''}<tr><td style="color:var(--t3)">จำนวน</td><td><strong style="color:var(--pri);font-size:16px">${s.qty || 0} ตัว</strong></td></tr><tr><td style="color:var(--t3)">สถานะ</td><td>${spill(s.status || 'wait')}</td></tr><tr><td style="color:var(--t3)">ชำระเงิน</td><td><span class="${sPay.paid ? 'pay-paid' : 'pay-unpaid'}">${sPay.paid ? '✅ จ่ายแล้ว' : '⏳ ยังไม่จ่าย'}</span></td></tr>${sDel.sender ? `<tr><td style="color:var(--t3)">ผู้ส่ง</td><td>${sDel.sender}</td></tr>` : ''}${sDel.receiver ? `<tr><td style="color:var(--t3)">ผู้รับ</td><td>${sDel.receiver}</td></tr>` : ''}${sDel.note ? `<tr><td style="color:var(--t3)">หมายเหตุส่ง</td><td>${sDel.note}</td></tr>` : ''}</table>${(sDel.proofs || []).length ? `<div style="margin-top:8px"><div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:6px">หลักฐานการส่ง</div><div style="display:flex;gap:8px;flex-wrap:wrap">${(sDel.proofs || []).map(img => `<img src="${img}" style="width:80px;height:80px;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid var(--g2)" onclick="bigImg('${img}')">`).join('')}</div></div>` : ''}</div>`;
+    }).join('');
+    return `<div class="rep-item" style="border-left:3px solid var(--pri)"><div class="rep-item-num">${num}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px"><span style="font-family:'Mitr',sans-serif;font-size:14px;font-weight:500">รายการที่ ${num} — ${o.model}${o.color ? ' / ' + o.color : ''}</span><div style="display:flex;gap:6px;align-items:center">${spill(o.status)}${ce ? `<button class="btn bg bxs" onclick="startEdit('${o.id}')">✏️</button>` : ''}</div></div><div class="steps">${steps}</div>${imgSection}${table}</div>${subHTML}`;
+  }).join('');
+  return `<div class="card"><div class="card-title">👤 รายงานลูกค้ารายบุคคล</div><div class="fg" style="margin-bottom:0"><label>เลือกลูกค้า</label><select style="max-width:260px" onchange="window._rc=this.value;render()">${custs.map(c => `<option ${c === sel ? 'selected' : ''}>${c}</option>`).join('')}</select></div></div>
+  <div id="pdf-cust"><div class="card" style="border-left:4px solid var(--pri)"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px"><div><div style="font-family:'Mitr',sans-serif;font-size:20px;font-weight:600">${sel}</div><div style="font-size:13px;color:var(--t3)">${cos.length} ออเดอร์ • รวม ${totQ} ตัว</div></div><div style="text-align:right"><div style="font-family:'Mitr',sans-serif;font-size:32px;font-weight:700;color:var(--pri)">${totQ}</div><div style="font-size:12px;color:var(--t3)">ตัวทั้งหมด</div></div></div><div class="rep-h">สรุปรายการสั่งซื้อ</div><table class="tbl"><tr><th>รุ่น</th><th>สี</th><th>จำนวน</th></tr>${Object.values(mb).map(m => `<tr><td>${m.model}</td><td>${m.color || '-'}</td><td><strong>${m.qty} ตัว</strong></td></tr>`).join('')}<tr class="total-row"><td colspan="2">รวมทั้งหมด</td><td>${totQ} ตัว</td></tr></table></div>${allItems}</div>
+  <div class="export-bar"><button class="pdfbtn" onclick="doExportPDF('pdf-cust','รายงาน_${sel}')">📄 ส่งออก PDF</button><button class="imgbtn" onclick="doExportImg('pdf-cust','รายงาน_${sel}')">🖼️ บันทึกรูป</button></div>`;
+}
+
+// ── Report Model ──
+function getAllModels() { const s = new Set(); window._orders.forEach(o => { if (o.model) s.add(o.model); (o.subs || []).forEach(sub => { if (sub.model) s.add(sub.model); }); }); return [...s].sort(); }
+function renderRM() {
+  const mdls = getAllModels();
+  if (!mdls.length) return `<div class="empty"><div class="empty-ico">👕</div><p>ยังไม่มีข้อมูลรุ่น</p></div>`;
+  const sel = window._rm || mdls[0]; const rows = [];
+  window._orders.forEach(o => {
+    if (o.model === sel) rows.push({ name: o.name, color: o.color || '', size: o.size || '', qty: parseInt(o.qty) || 0, status: o.status, imgs: o.imgs || [], deliveryDate: o.deliveryDate || '' });
+    (o.subs || []).forEach(s => { if (s.model === sel) rows.push({ name: o.name, color: s.color || '', size: s.size || '', qty: parseInt(s.qty) || 0, status: s.status || o.status, imgs: s.imgs || [], deliveryDate: o.deliveryDate || '' }); });
+  });
+  const grandT = rows.reduce((s, r) => s + (r.qty || 0), 0);
+  let heroImg = null; for (const r of rows) { if (r.imgs && r.imgs[0]) { heroImg = r.imgs[0]; break; } }
+  const cg = {};
+  rows.forEach(r => {
+    const ck = `${r.color || 'ไม่ระบุสี'}__${r.size || '-'}`;
+    if (!cg[ck]) cg[ck] = { color: r.color || 'ไม่ระบุสี', size: r.size || '-', rows: [], total: 0 };
+    const ex = cg[ck].rows.find(x => x.name === r.name && x.deliveryDate === r.deliveryDate);
+    if (ex) { ex.qty += r.qty; if (r.status) ex.status = r.status; } else cg[ck].rows.push({ name: r.name, qty: r.qty, status: r.status, deliveryDate: r.deliveryDate });
+    cg[ck].total += r.qty;
+  });
+  const ct = Object.values(cg).map(c => `<div style="margin-bottom:18px"><div style="font-weight:700;font-size:13px;margin-bottom:8px">🎨 ${c.color}${c.size && c.size !== '-' ? ' • 📏 ' + c.size : ''} — <span style="color:var(--pri)">${c.total} ตัว</span></div><table class="tbl"><tr><th>ลูกค้า</th><th>จำนวน</th><th>สถานะ</th><th>กำหนดส่ง</th></tr>${c.rows.map(r => `<tr><td><strong>${r.name}</strong></td><td><strong>${r.qty} ตัว</strong></td><td>${spill(r.status)}</td><td>${r.deliveryDate ? dueDateBadge(r.deliveryDate) : '<span style="color:var(--t4);font-size:12px">—</span>'}</td></tr>`).join('')}<tr class="total-row"><td>รวม</td><td>${c.total} ตัว</td><td></td><td></td></tr></table></div>`).join('');
+  const ce = curRole === 'admin' || curRole === 'staff'; const custCount = [...new Set(rows.map(r => r.name))].length;
+  return `<div class="card"><div class="card-title">👕 รายงานรุ่นเสื้อ</div><div class="fg" style="margin-bottom:0"><label>เลือกรุ่น (${mdls.length} รุ่น)</label><select style="max-width:300px" onchange="window._rm=this.value;render()">${mdls.map(m => `<option ${m === sel ? 'selected' : ''}>${m}</option>`).join('')}</select></div></div>
+  <div id="pdf-model"><div class="model-head">${heroImg ? `<img src="${heroImg}" class="model-img" onclick="bigImg('${heroImg}')">` : `<div class="model-img-ph"><span style="font-size:28px">📷</span><span>ไม่มีรูป</span></div>`}<div style="flex:1"><div style="font-family:'Mitr',sans-serif;font-size:22px;font-weight:700;color:var(--pri)">${sel}</div><div style="font-size:13px;color:var(--t2);margin:4px 0">${custCount} ลูกค้า • ${rows.length} รายการ</div><div style="font-family:'Mitr',sans-serif;font-size:44px;font-weight:700;color:var(--pri);line-height:1">${grandT}</div><div style="font-size:13px;color:var(--t3)">ตัวรวมทั้งหมด</div>${ce ? `<label class="btn bg bxs" style="cursor:pointer;margin-top:8px;display:inline-flex">📷 เปลี่ยนรูปรุ่น<input type="file" accept="image/*" style="display:none" onchange="repMImg('${sel}',event)"></label>` : ''}</div></div><div class="card"><div class="rep-h">รายละเอียดแยกตามสี ไซส์ และลูกค้า</div>${ct || '<p style="color:var(--t3)">ไม่มีข้อมูล</p>'}<div style="background:var(--pri-ll);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--pri-l);margin-top:12px"><div style="font-size:13px;color:var(--t3)">ยอดผลิตรวม — รุ่น ${sel}</div><div style="font-family:'Mitr',sans-serif;font-size:44px;font-weight:700;color:var(--pri)">${grandT} <span style="font-size:18px">ตัว</span></div><div style="font-size:13px;color:var(--t3)">จาก ${custCount} ลูกค้า</div></div></div></div>
+  <div class="export-bar"><button class="pdfbtn" onclick="doExportPDF('pdf-model','คำสั่งผลิต_${sel}')">📄 ส่งออก PDF</button><button class="imgbtn" onclick="doExportImg('pdf-model','คำสั่งผลิต_${sel}')">🖼️ บันทึกรูป</button></div>`;
+}
+function repMImg(model, e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = ev => {
+    let found = false;
+    for (const o of window._orders) { if (o.model === model) { if (!o.imgs) o.imgs = []; o.imgs[0] = ev.target.result; fbSaveOrder(o); found = true; break; } for (const s of (o.subs || [])) { if (s.model === model) { if (!s.imgs) s.imgs = []; s.imgs[0] = ev.target.result; fbSaveOrder(o); found = true; break; } } if (found) break; }
+    if (found) toast('✅ เปลี่ยนรูปแล้ว');
+  }; r.readAsDataURL(f);
+}
+
+// ── Stats ──
+function renderStats() {
+  const tO = window._orders.length, tQ = window._orders.reduce((s, o) => s + o.qty, 0);
+  const tS = window._orders.filter(o => o.status === 'sent').reduce((s, o) => s + o.qty, 0);
+  const tR = window._orders.filter(o => o.status === 'ready').reduce((s, o) => s + o.qty, 0);
+  const tP = window._orders.filter(o => o.status === 'prod').reduce((s, o) => s + o.qty, 0);
+  const tI = window._orders.filter(o => o.status === 'issue').length;
+  const tPaid = window._orders.filter(o => o.payment && o.payment.paid).length;
+  const byM = {}; window._orders.forEach(o => { if (!byM[o.model]) byM[o.model] = { qty: 0, sent: 0 }; byM[o.model].qty += o.qty; if (o.status === 'sent') byM[o.model].sent += o.qty; (o.subs || []).forEach(s => { if (s.model) { if (!byM[s.model]) byM[s.model] = { qty: 0, sent: 0 }; byM[s.model].qty += (parseInt(s.qty) || 0); if (s.status === 'sent') byM[s.model].sent += (parseInt(s.qty) || 0); } }); });
+  const mR = Object.entries(byM).sort((a, b) => b[1].qty - a[1].qty); const mQ = Math.max(...mR.map(([, v]) => v.qty), 1);
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px"><div style="font-family:'Mitr',sans-serif;font-size:16px;font-weight:500">📊 สถิติการผลิต</div><div style="display:flex;gap:8px"><button class="pdfbtn bsm" onclick="doExportPDF('sa','สถิติ')">📄 PDF</button><button class="imgbtn bsm" onclick="doExportImg('sa','สถิติ')">🖼️ รูป</button></div></div>
+  <div id="sa"><div class="sg"><div class="sc"><div class="sn">${tO}</div><div class="sl">ออเดอร์รวม</div></div><div class="sc"><div class="sn" style="color:var(--amb)">${tQ}</div><div class="sl">ตัวทั้งหมด</div></div><div class="sc"><div class="sn" style="color:var(--teal)">${tP}</div><div class="sl">กำลังผลิต</div></div><div class="sc"><div class="sn" style="color:var(--grn)">${tR}</div><div class="sl">พร้อมส่ง</div></div><div class="sc"><div class="sn" style="color:var(--blu)">${tS}</div><div class="sl">ส่งแล้ว</div></div><div class="sc"><div class="sn" style="color:var(--red)">${tI}</div><div class="sl">มีปัญหา</div></div><div class="sc"><div class="sn" style="color:var(--grn)">${tPaid}</div><div class="sl">จ่ายแล้ว</div></div></div>
+  <div class="card"><div class="card-title">สถิติรายรุ่น</div>${mR.length ? mR.map(([m, v]) => `<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><strong>${m}</strong><span style="color:var(--t3)">ส่งแล้ว ${v.sent}/${v.qty}</span></div><div style="background:var(--g1);border-radius:6px;height:10px;overflow:hidden"><div style="background:var(--pri);height:100%;width:${Math.round(v.qty / mQ * 100)}%;border-radius:6px"></div></div></div>`).join('') : '<p style="color:var(--t3)">ยังไม่มีข้อมูล</p>'}</div></div>`;
+}
+
+// ── Export ──
+async function doExportPDF(id, fname) { const el = document.getElementById(id); if (!el) { toast('❌ ไม่พบ', false); return; } toast('⏳ กำลังสร้าง PDF...'); try { await new Promise(r => setTimeout(r, 300)); const c = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#fff', logging: false, allowTaint: true }); const imgD = c.toDataURL('image/jpeg', .92); const { jsPDF } = window.jspdf; const pdf = new jsPDF({ orientation: c.width > c.height ? 'landscape' : 'portrait', unit: 'px', format: [c.width / 2, c.height / 2] }); pdf.addImage(imgD, 'JPEG', 0, 0, c.width / 2, c.height / 2); pdf.save(fname + '.pdf'); toast('✅ PDF บันทึกแล้ว'); } catch (err) { toast('❌ ' + err.message, false); } }
+async function doExportImg(id, fname) { const el = document.getElementById(id); if (!el) { toast('❌ ไม่พบ', false); return; } toast('⏳ กำลังสร้างรูป...'); try { await new Promise(r => setTimeout(r, 300)); const c = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#fff', logging: false, allowTaint: true }); const a = document.createElement('a'); a.download = fname + '.png'; a.href = c.toDataURL('image/png'); document.body.appendChild(a); a.click(); document.body.removeChild(a); toast('✅ รูปบันทึกแล้ว'); } catch (err) { toast('❌ ' + err.message, false); } }
+
+function toast(msg, ok = true) {
+  const t = document.getElementById('toast'); t.textContent = msg;
+  t.className = 'toast ' + (ok === false ? 'terr' : ok === 'info' ? 'tinfo' : 'tok');
+  t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000);
+}
+
+window._initApp = function () { window._renderLogo(); };
+</script>
+</body>
+</html>
